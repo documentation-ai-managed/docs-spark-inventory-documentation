@@ -1,0 +1,63 @@
+---
+title: Webhooks
+description: Set up webhooks for real-time inventory updates
+---
+
+## Webhook Integration
+
+Webhooks allow you to receive real-time notifications when inventory changes occur. Set up endpoints to process these events.
+
+<Callout kind="info">Webhooks deliver events as HTTP POST requests to your specified URL.</Callout>
+
+<Steps>
+  <Step title="Create Endpoint" icon="server">
+    Build an endpoint that accepts POST requests.
+  </Step>
+  <Step title="Register Webhook" icon="plus">
+    Add your URL in the Spark Inventory dashboard.
+  </Step>
+  <Step title="Handle Events" icon="code">
+    Process incoming webhook payloads.
+  </Step>
+</Steps>
+
+<Tabs>
+  <Tab title="Event Types" icon="bell">
+    | Event | Description |
+    |-------|-------------|
+    | stock.low | Stock fell below minimum threshold |
+    | stock.high | Stock exceeded maximum threshold |
+    | product.added | New product added to inventory |
+    | product.removed | Product removed from inventory |
+  </Tab>
+  <Tab title="Payload Example" icon="file-text">
+    <CodeGroup tabs="JSON,JavaScript">
+      ```json
+{
+  "event": "stock.low",
+  "productId": "123",
+  "currentStock": 5,
+  "timestamp": "2024-01-15T10:30:00Z"
+}
+```
+      ```javascript
+app.post('/webhook', (req, res) => {
+  const { event, productId, currentStock } = req.body;
+  console.log(`Event: ${event} for product ${productId}`);
+  res.status(200).send('OK');
+});
+```
+    </CodeGroup>
+  </Tab>
+</Tabs>
+
+<ExpandableGroup>
+  <Expandable title="Security" default-open="true">
+    Verify webhook signatures to ensure authenticity.
+  </Expandable>
+  <Expandable title="Retry Logic" default-open="false">
+    Failed webhooks are retried up to 3 times with exponential backoff.
+  </Expandable>
+</ExpandableGroup>
+
+<Callout kind="tip">Test webhooks using tools like ngrok for local development.</Callout>

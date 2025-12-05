@@ -1,0 +1,85 @@
+---
+title: Authentication
+description: Learn how to authenticate with the Spark Inventory API
+---
+
+## API Authentication
+
+You authenticate with Spark Inventory using API keys. Generate your key in the dashboard and include it in requests.
+
+<Callout kind="info">Keep your API key secure and never share it publicly.</Callout>
+
+<Steps>
+  <Step title="Generate Key" icon="key">
+    Log into your dashboard and navigate to API settings.
+  </Step>
+  <Step title="Copy Key" icon="copy">
+    Copy the generated API key.
+  </Step>
+  <Step title="Include in Requests" icon="send">
+    Add the key to your request headers.
+  </Step>
+</Steps>
+
+<Tabs>
+  <Tab title="REST API" icon="code">
+    <CodeGroup tabs="curl,JavaScript">
+      ```bash
+curl -H "Authorization: Bearer YOUR_API_KEY" https://api.spark-inventory.com/inventories
+```
+      ```javascript
+const response = await fetch('https://api.spark-inventory.com/inventories', {
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY'
+  }
+});
+const data = await response.json();
+console.log(data);
+```
+    </CodeGroup>
+  </Tab>
+  <Tab title="SDK" icon="package">
+    <CodeGroup tabs="npm,yarn">
+      ```bash
+npm install spark-inventory-sdk
+```
+      ```bash
+yarn add spark-inventory-sdk
+```
+    </CodeGroup>
+    
+    <Expandable title="SDK Usage Example" default-open="false">
+      ```javascript
+import { SparkInventory } from 'spark-inventory-sdk';
+
+const client = new SparkInventory({
+  apiKey: 'YOUR_API_KEY'
+});
+
+const inventories = await client.getInventories();
+console.log(inventories);
+```
+    </Expandable>
+  </Tab>
+</Tabs>
+
+<ExpandableGroup>
+  <Expandable title="Rate Limits" default-open="false">
+    API calls are limited to 1000 per hour. Monitor your usage in the dashboard.
+  </Expandable>
+  <Expandable title="Security Best Practices" default-open="true">
+    Rotate keys regularly and use HTTPS for all requests.
+  </Expandable>
+</ExpandableGroup>
+
+## Troubleshooting
+
+If authentication fails, check these common issues:
+
+| Issue | Solution |
+|-------|----------|
+| Invalid key | Regenerate your API key |
+| Expired token | Refresh your session |
+| Rate limit exceeded | Wait and retry later |
+
+<Callout kind="danger">Do not include API keys in client-side code.</Callout>

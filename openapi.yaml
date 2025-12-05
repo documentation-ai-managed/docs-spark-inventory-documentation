@@ -1,0 +1,155 @@
+openapi: '3.0.0'
+info:
+  version: 1.0.0
+  title: Spark Inventory API
+  license:
+    name: MIT
+servers:
+  - url: https://api.spark-inventory.com/v1
+paths:
+  /inventories:
+    get:
+      summary: List all inventory items
+      operationId: listInventories
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: A paged array of inventory items
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inventories'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a new inventory item
+      operationId: createInventory
+      responses:
+        201:
+          description: Inventory item created successfully
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /inventories/{inventoryId}:
+    get:
+      summary: Retrieve details for a specific inventory item
+      operationId: getInventoryById
+      parameters:
+        - name: inventoryId
+          in: path
+          required: true
+          description: The unique identifier of the inventory item
+          schema:
+            type: string
+      responses:
+        200:
+          description: Details of the requested inventory item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inventories'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update an existing inventory item
+      operationId: updateInventory
+      responses:
+        200:
+          description: Inventory item updated successfully
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /predictions:
+    get:
+      summary: Get AI demand predictions for inventory items
+      operationId: getPredictions
+      parameters:
+        - name: productId
+          in: query
+          description: Filter predictions by product identifier
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: Demand predictions for the specified products
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Predictions'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Inventory:
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        stockLevel:
+          type: integer
+        predictedDemand:
+          type: number
+    Inventories:
+      type: array
+      items:
+        $ref: '#/components/schemas/Inventory'
+    Prediction:
+      required:
+        - productId
+        - forecast
+      properties:
+        productId:
+          type: string
+        forecast:
+          type: number
+        confidence:
+          type: number
+    Predictions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Prediction'
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

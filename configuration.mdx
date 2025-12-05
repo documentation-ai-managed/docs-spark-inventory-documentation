@@ -1,0 +1,75 @@
+---
+title: Configuration
+description: Configure Spark Inventory settings and integrations
+---
+
+## Basic Configuration
+
+Configure your inventory settings to match your business needs. Start with basic thresholds and alerts.
+
+<Columns cols={2}>
+  <Card title="Stock Thresholds" icon="settings" href="#thresholds">
+    Set minimum and maximum stock levels.
+  </Card>
+  <Card title="Alert Preferences" icon="bell" href="#alerts">
+    Configure notification settings.
+  </Card>
+</Columns>
+
+<Steps>
+  <Step title="Access Settings" icon="cog">
+    Go to the configuration section in your dashboard.
+  </Step>
+  <Step title="Set Thresholds" icon="sliders">
+    Define stock levels for each product category.
+  </Step>
+  <Step title="Enable Alerts" icon="bell">
+    Choose notification methods and frequencies.
+  </Step>
+  <Step title="Save Changes" icon="save">
+    Apply your configuration.
+  </Step>
+</Steps>
+
+<Tabs>
+  <Tab title="Global Settings" icon="globe">
+    <CodeGroup tabs="JSON,YAML">
+      ```json
+{
+  "lowStockThreshold": 10,
+  "highStockThreshold": 200,
+  "alertEmail": "manager@company.com"
+}
+```
+      ```yaml
+lowStockThreshold: 10
+highStockThreshold: 200
+alertEmail: manager@company.com
+```
+    </CodeGroup>
+  </Tab>
+  <Tab title="Product Categories" icon="folder">
+    <Expandable title="Category Configuration" default-open="true">
+      Configure different thresholds for product types.
+      
+      ```javascript
+const categoryConfig = {
+  electronics: { minStock: 5, maxStock: 100 },
+  clothing: { minStock: 20, maxStock: 500 }
+};
+console.log(categoryConfig);
+```
+    </Expandable>
+  </Tab>
+</Tabs>
+
+<ExpandableGroup>
+  <Expandable title="Advanced Options" default-open="false">
+    For power users, enable custom AI models and integrations.
+  </Expandable>
+  <Expandable title="Backup Settings" default-open="false">
+    Configure automatic backups of your configuration.
+  </Expandable>
+</ExpandableGroup>
+
+<Callout kind="tip">Test your configuration with sample data before going live.</Callout>
